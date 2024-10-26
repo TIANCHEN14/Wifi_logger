@@ -19,7 +19,7 @@ WiFiClient wifiClient;
 MqttClient mqttClient(wifiClient);
 
 // Delay time 
-const long interval = 100;
+const long interval = 1000;
 unsigned long previousMills = 0;
 
 // setup as7431 sensor
@@ -33,7 +33,7 @@ void publish_spectrum_data();
 
 void setup() {
   // initialized serial and wait for port to open
-  Serial.begin(115200);
+  Serial.begin(9600);
 
   // Setting up as7431 as spectrum meter
   while(!as7341.begin()){
@@ -63,8 +63,6 @@ void loop() {
     wifi_connect();
   }
   
-
-
   // constantly checking making sure we are connected to the mqtt broker
   while(!mqttClient.connected()){
     mqtt_reconnect();
@@ -74,6 +72,9 @@ void loop() {
 
  // make sure it is not constantly emiiting
   unsigned long currentMillis = millis();
+
+  //Serial.print("time Interval : ");
+  //Serial.println(currentMillis - previousMills);
 
   if (currentMillis - previousMills >= interval) {
     // save the last time a message was sent
@@ -148,7 +149,7 @@ void wifi_connect(){
 void publish_spectrum_data(){
 
   // create a json object to store the reading
-  StaticJsonDocument<512> spectrum_dict;
+  JsonDocument spectrum_dict;
 
   // add reading to the json object
   spectrum_dict["415nm"] = as7341.getChannel(AS7341_CHANNEL_415nm_F1);
