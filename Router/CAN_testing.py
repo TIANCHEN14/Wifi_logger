@@ -7,7 +7,7 @@ print(os.name)
 
 os.system('sudo ifconfig can0 down')
 os.system('sudo ip link set can0 type can bitrate 1000000')
-os.system("sudo ifconfig can0 txqueuelen 100000")
+os.system("sudo ifconfig can0 txqueuelen 10000")
 os.system('sudo ifconfig can0 up')
 
 can1 = can.interface.Bus(channel = 'can0', bustype = 'socketcan')
